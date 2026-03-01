@@ -1,5 +1,5 @@
 ---
-title: 09-FFI
+title: 09-外部函数接口
 date: 2026-02-28 19:49:16
 tags: Alum
 ---
@@ -18,7 +18,7 @@ extern println(string): void
 的方式直接定义，但还是推荐引入`io.al`，这样更方便也更直观。
 
 ## 与`C语言`的兼容性
-我们直接用示例介绍，还记得在[02-Installation](02-Installation.md)中安装的`almk`工具吧？它可以很好的帮我们处理`Alum`与`C语言`的混合编译与连接问题。关于`almk`我们会在未来的章节讲解，下面是`Alum`与`C语言`混合编程的例子：  
+我们直接用示例介绍，还记得在[02-Installation](/2026/02/27/02-Installation/)中安装的`almk`工具吧？它可以很好的帮我们处理`Alum`与`C语言`的混合编译与连接问题。关于`almk`我们会在未来的章节讲解，下面是`Alum`与`C语言`混合编程的例子：  
 1. 首先在终端输入：
 ```bash
 $ almk new c_compat
@@ -47,6 +47,8 @@ $define HELPER_AL nil
 extern c_add(int, int): int
 extern c_multiply(int, int): int
 extern c_calculate_factorial(int): int
+
+$endif // HELPER_AL
 ```
 3. 并将以下代码写入`src/helper.c`文件中：
 ```c

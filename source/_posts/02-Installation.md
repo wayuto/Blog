@@ -20,7 +20,7 @@ $ echo 'export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup' >
 并切换到`Bash`以进行安装
 ```bash
 $ bash
-$ rustup default nightly // Alum依赖Rust Nightly
+$ rustup default nightly # Alum依赖Rust Nightly
 ```
 
 ## 安装Alum
@@ -35,4 +35,4 @@ $ sh ./install.sh
 ```
 然后，重新启动Shell, 就能使用`alc`, `almk`等程序了。  
 
-为了更好的开发体验，使用`VSCode`时，可以从本地安装`~/Alum/alum-vscode/alum-vscode/alum-vscode-0.9.1.vsix `，注意：这并不包含`LSP`，仅提供`Alum`语法高亮。
+为了更好的开发体验，使用`VSCode`时，可以从本地安装`~/Alum/alum-vscode/alum-vscode/alum-vscode-0.9.2.vsix `，注意：这并不包含`LSP`，仅提供`Alum`语法高亮。
