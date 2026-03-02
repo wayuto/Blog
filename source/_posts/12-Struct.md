@@ -11,7 +11,7 @@ fun main(): int {
     let stu1_sex = "Male"
     let stu1_age = 15
     let stu1_height = 175.0
-    let stu1_weigh = 60.0
+    let stu1_weight = 60.0
     return 0
 }
 ```
@@ -29,13 +29,14 @@ let s = S {
     ...
 }
 ```
-这与`C语言`是一致的，那么对于上文存储的学生信息，我们便可以用结构体重写：
+这与`C语言`是一致的，但需要注意的是，在`Alum`中，定义的结构体作为一种类型，不需要像`C语言`一样使用`Struct T`，可以直接使用`T`。  
+那么对于上文存储的学生信息，我们便可以用结构体重写：
 ```alum
 struct Student {
     name: string, 
     sex: string, 
     age: int, 
-    height: float
+    height: float, 
     weight: float
 }
 
