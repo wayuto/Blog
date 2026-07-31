@@ -43,4 +43,4 @@ $ sudo ln -s /home/$USER/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/
 $ sudo ln -s /home/$USER/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld /usr/bin
 ```
 
-为了更好的开发体验，使用`VSCode`时，可以从本地安装`~/Alum/alum-vscode/alum-vscode/alum-vscode-0.9.3.vsix `，注意：这并不包含`LSP`，仅提供`Alum`语法高亮。
+为了更好的开发体验，使用`VSCode`时，可以从本地安装`~/Alum/alum-vscode/alum-vscode/alum-vscode-xxx.vsix `，注意：这并不包含`LSP`，仅提供`Alum`语法高亮。

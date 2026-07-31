@@ -29,4 +29,66 @@ Hello world!
 ```
 
 ## Alum语言的来源
-`Alum`的前身是由`TypeScript`编写的`Gos`语言，是一种解释型语言，灵感来自放学路上的灵光一现，后在`0.2.7`版本使用`Rust`重构，并后续添加`AOT`，`0.5.x`版本后因维护难度抛弃`GosVM`，保留`AOT`，现在的`Alum`是使用`Cranelift`重写后的版本，使用`rust.lld`做连接器，初始版本使用`NASM`与`GNU Linker`编译后端输出的汇编字符串。
+`Alum`的前身是由`TypeScript`编写的`Gos`语言，是一种解释型语言，起初是笔者为了学习`TypeScript`编写的`Toy Language`，后在`0.2.7`版本使用`Rust`重构，并后续添加`AOT`，`0.5.x`版本后因维护难度抛弃`GosVM`，保留`AOT`。
+
+## Alum语言的后端
+`<=0.2.7`，`Gos`采用了字节码的后端，性能相较于`Tree-Walker`有提升，但仍显著慢于`AOT`语言，并且不易编写`标准库`。
+`>=0.2.7`，`Gos`转向`AOT`后端，引入了`GosIR`，并将其编译为`x86_64 Linux`平台的汇编字符串，使用`nasm`汇编后使用`GNU Linker`链接`对象文件`与`标准库`。
+`>=0.5.x`，`Gos`将后端切换到`Cranelift`，并改名为`Alum`
+`>=0.9.4`, 由于`Cranelift API`的复杂性，笔者逐渐无力维护，只能交由`Agent`编写代码，同时也难以review，于是切换回自研后端，并且不再生成`汇编字符串`，而是在`IR`之后生成更底层的，可以直接映射为汇编的`ASM IR`，并抛弃`nasm`，使用`自制汇编器`将`ASM IR`翻译为`机器码`
+
+## Alum语言的编译流程
+```
+Source Code (.al)
+        │
+        ▼
+┌───────────────┐
+│ Preprocessor  │  →  Handles $import, $define, $ifdef, $ifndef, $endif
+└───────────────┘
+        │
+        ▼
+┌───────────────┐
+│    Lexer      │  →  Tokenizes source code into tokens
+└───────────────┘
+        │
+        ▼
+┌───────────────┐
+│    Parser     │  →  Builds Abstract Syntax Tree (AST)
+└───────────────┘
+        │
+        ▼
+┌───────────────┐
+│  Type Checker │  →  Validates type safety and semantic rules
+└───────────────┘
+        │
+        ▼
+┌───────────────┐
+│  Optimizer    │  →  Constant folding, dead code elimination, IR optimizations
+└───────────────┘
+        │
+        ▼
+┌───────────────┐
+│   IR Gen      │  →  Lowers AST to intermediate representation (IR)
+└───────────────┘
+        │
+        ▼
+┌──────────────────┐
+│ Code Generator   │  →  Emits x86-64 instructions (Asm IR)
+└──────────────────┘
+        │
+        ▼
+┌──────────────────┐
+│   Assembler      │  →  Encodes Asm IR → x86-64 machine code → ELF .o
+└──────────────────┘
+        │
+        ▼
+  Object File (.o)
+        │
+        ▼
+┌──────────────────┐
+│    Linker        │  →  LLD links object file with standard library
+└──────────────────┘
+        │
+        ▼
+  Executable File
+```

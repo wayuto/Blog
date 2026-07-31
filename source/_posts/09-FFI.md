@@ -11,7 +11,7 @@ tags: Alum
 ```alum
 extern F(PTn, ...): RT
 ```
-例如，我们每次调用`println`函数都要`$import "io.al"`，但其实，也可以通过
+例如，我们每次调用`println`函数都要`$import "io.ah"`，但其实，也可以通过
 ```alum
 extern println(string): void
 ```
@@ -77,9 +77,9 @@ int c_calculate_factorial(int n) {
 ```
 4. 最后，修改`src/main.al`文件： 
 ```alum
-$import "io.al"
-$import "convert.al"
-$import "helper.al"
+$import "io.ah"
+$import "convert.ah"
+$import "helper.ah"
 
 fun main(): int {
     let sum: int = c_add(10, 20)

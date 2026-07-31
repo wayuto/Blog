@@ -15,8 +15,8 @@ let i: int = 1
 需要注意的是，`Alum`的变量必须在声明的同时初始化，这意味着，即使暂时没有用到它，你也要给他一个值，哪怕是`0`, `0.0`, `''`(空字符串)，`false`，`nil`，并且`Alum`中并没有变量与常量的区分，默认也没有不可变性，这让语法以及后端实现更简单，但也需要开发者自己保证一个标识符是变量还是常量。另外，`Alum`也不支持通过`extern`关键字引入全局变量。  
 下面给出一个关于变量的例子，出自`Alum/examples/02_variables.al`：
 ```alum
-$import "io.al"
-$import "convert.al"
+$import "io.ah"
+$import "convert.ah"
 
 // Variables Example
 // Demonstrates variable declarations with different types
