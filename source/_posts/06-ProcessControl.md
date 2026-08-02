@@ -46,8 +46,36 @@ else
 ```
 当条件`condition`成立，即值为`true`、非`0`值或非`nil`值时，则执行then_expr，否则就执行else_expr。  
 > 另外，`if-else`也能产生值，相当于`C语言`中的三元运算符`?:`。
+当面临多个分支时，我们当然也可以用多个`if-else if-else`实现，但这未免太过繁琐，这时就可以使用`match`实现：
+```
+$import "io.ah"
 
-3. ## 循环
+// Match Example
+
+fun func(n: int): void {
+    match n {
+        0: {
+            println("`s` is equal to 0")
+        }
+        1: {
+            println("`s` is equal to 1")
+        }
+        _: {
+            println("`s` is not equal to 0 or 1")
+        }
+    }
+}
+
+fun main(): void {
+    for n in 0..3 {
+        func(n)
+    }
+}
+```
+> 注：示例代码来自Alum/examples/26_match.al
+
+
+1. ## 循环
 为了介绍`循环`，我们来思考一个问题，如果要求你计算`1`到`100`的和，你应该怎么写程序？你当然可以这么写
 ```alum
 let sum: int = 1 + 2 + 3 + ... + 100
