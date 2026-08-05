@@ -40,14 +40,14 @@ fun identity<T>(x: T): T {
 
 fun main(): int {
     // Test 1: identity with integer
-    let x: int = 42
-    let result: int = identity(x)
+    var x: int = 42
+    var result: int = identity(x)
     println("identity(42) = ")
     println(itoa(result))
 
     // Test 2: identity with float
-    let y: float = 3.14
-    let f_result: float = identity(y)
+    var y: float = 3.14
+    var f_result: float = identity(y)
     println("identity(3.14) = ")
     println(ftoa(f_result))
 
@@ -79,12 +79,12 @@ fun vec_new<T>(): Vec<T> {
 		},
 		push: \(v: *Vec<T>, elem: T): void {
 			if v.len >= v.capacity {
-				let new_capacity: int = if v.capacity == 0 {
+				var new_capacity: int = if v.capacity == 0 {
 					4
 				} else {
 					v.capacity * 2
 				}
-				let new_data: T[] = [T; new_capacity]
+				var new_data: T[] = [T; new_capacity]
 				for i in 0..v.len {
 					new_data[i] = v.data[i]
 				}
@@ -97,7 +97,7 @@ fun vec_new<T>(): Vec<T> {
 		pop: \(v: *Vec<T>): T {
 			if v.len == 0 return nil
 			v.len = v.len - 1
-			let elem: T = v.data[v.len]
+			var elem: T = v.data[v.len]
 			return elem
 		},
 		clear: \(v: *Vec<T>): void {
@@ -123,7 +123,7 @@ $import "vec.ah"
 // Vector Example
 
 fun main(): int {
-	let v: Vec<int> = vec_new()
+	var v: Vec<int> = vec_new()
 	for i in 0..10 {
 		v.push(&v, i * i)
 	}

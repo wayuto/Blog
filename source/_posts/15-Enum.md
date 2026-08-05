@@ -75,7 +75,7 @@ fun main(): int {
     println(itoa(NORTH))          // -1
 
     // Enums are ints and work in expressions
-    let next: int = Color.BLACK + 1
+    var next: int = Color.BLACK + 1
     print("BLACK + 1 = ")
     println(itoa(next))
 

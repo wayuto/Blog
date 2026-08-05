@@ -15,7 +15,7 @@ $import "convert.ah"
 fun main(): int {
     // Array literal with explicit values
     // Type is inferred from elements
-    let numbers: int[5] = [1, 2, 3, 4, 5]
+    var numbers: int[5] = [1, 2, 3, 4, 5]
 
     // Access array elements
     println("First element: ")
@@ -55,7 +55,7 @@ fun main(): int {
 
 在示例代码中，我们看到了一些关于`Alum`中数组的用法，例如，数组变量的初始化方法如下：
 ```alum
-let V: T[N] = [Vn, ...]
+var V: T[N] = [Vn, ...]
 ```
 但这样初始化变量未免太愚蠢了，费时且费力，如果是一个连续的且递增的数组，我们可以直接使用`..`运算符，如，定义一个`[0, 1, 2, ..., 99]`的数组，可以直接通过`0..100`生成。  
 
@@ -71,11 +71,11 @@ $import "convert.ah"
 // Demonstrates bubble sort algorithm
 
 fun main(): int {
-    let numbers: int[8] = [64, 34, 25, 12, 22, 11, 90, 45]
-    let n: int = 8
-    let i: int = 0
-    let j: int = 0
-    let temp: int = 0
+    var numbers: int[8] = [64, 34, 25, 12, 22, 11, 90, 45]
+    var n: int = 8
+    var i: int = 0
+    var j: int = 0
+    var temp: int = 0
 
     println("Original array:")
     for i in 0..n {

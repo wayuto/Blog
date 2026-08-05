@@ -7,11 +7,11 @@ tags: Alum
 现在我们想象一个实际问题，假如我们要记录下1个学生的`姓名`、`性别`、`年龄`、`身高`、`体重`，我们可以怎么写？很自然的可以写出以下代码：
 ```alum
 fun main(): int {
-    let stu1_name = "Xiao Ming"
-    let stu1_sex = "Male"
-    let stu1_age = 15
-    let stu1_height = 175.0
-    let stu1_weight = 60.0
+    var stu1_name = "Xiao Ming"
+    var stu1_sex = "Male"
+    var stu1_age = 15
+    var stu1_height = 175.0
+    var stu1_weight = 60.0
     return 0
 }
 ```
@@ -24,7 +24,7 @@ struct S {
 ```
 我们可以通过`S.field`访问结构体中的`字段`，构造一个结构体，可以用这样的语法：
 ```alum
-let s = S {
+var s = S {
     fieldN: V, 
     ...
 }
@@ -41,7 +41,7 @@ struct Student {
 }
 
 fun main(): int {
-    let stu1 = Student {
+    var stu1 = Student {
         name: "Xiao Ming", 
         sex: "Male", 
         age: 15, 
@@ -65,7 +65,7 @@ struct Point {
 }
 
 fun main(): int {
-    let p: Point = Point {
+    var p: Point = Point {
         x: 1,
         y: 1
     }

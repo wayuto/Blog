@@ -12,10 +12,10 @@ $import "io.ah"
 $import "convert.ah" // 这其中包含了itoa，用于将数字转为字符串。
 
 fun main(): int {
-    let a: int = 1
-    let b: int = a + 2
-    let c: int = b * 3
-    let d: string = itoa(c)
+    var a: int = 1
+    var b: int = a + 2
+    var c: int = b * 3
+    var d: string = itoa(c)
     println(d) // 输出结果
     return 0
 }
@@ -29,7 +29,7 @@ $import "io.ah" // 这里包含了input函数，用于从终端接收输入
 $import "convert.ah" 这其中也包含了atoi，用于将字符串转为数字
 
 fun main(): int {
-    let age: int = atoi(input("Enter your age"))
+    var age: int = atoi(input("Enter your age"))
     if age >= 18 { // 判断年龄是否大于等于18
         println("You are an adult.")
     } else {
@@ -78,16 +78,16 @@ fun main(): void {
 1. ## 循环
 为了介绍`循环`，我们来思考一个问题，如果要求你计算`1`到`100`的和，你应该怎么写程序？你当然可以这么写
 ```alum
-let sum: int = 1 + 2 + 3 + ... + 100
+var sum: int = 1 + 2 + 3 + ... + 100
 ```
 但这未免太费力了，但如果你知道求和公式：$\frac{n(n+1)}{2}$的话，就可以直接这么写
 ```alum
-let sum: int = 100 * (100 + 1) / 2
+var sum: int = 100 * (100 + 1) / 2
 ```
 但这只是个简单的例子，面对复杂的案例，我们并不总是能找到一个简单合适的数学公式，这时，我们便可以通过`循环`来解决。
 ```alum
-let i: int = 100
-let sum: int = 0
+var i: int = 100
+var sum: int = 0
 while i != 0 {
     sum += i
     i -= 1
@@ -105,7 +105,7 @@ for i in n..m
 ```
 这就相当于
 ```alum
-let i: int = n
+var i: int = n
 while i != m {
     for_expr
     i += 1
@@ -113,7 +113,7 @@ while i != m {
 ```
 所以，我们便能改写为：
 ```alum
-let sum: int = 0
+var sum: int = 0
 for i in 1..100 {
     sum += i
 } // 另外需要注意的是，这里的i仅存在于for语句的作用域内，在for语句之外无法访问。

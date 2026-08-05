@@ -82,15 +82,15 @@ $import "convert.ah"
 $import "helper.ah"
 
 fun main(): int {
-    let sum: int = c_add(10, 20)
+    var sum: int = c_add(10, 20)
     print("c_add(10, 20) = ")
     println(itoa(sum))
     
-    let product: int = c_multiply(5, 6)
+    var product: int = c_multiply(5, 6)
     print("c_multiply(5, 6) = ")
     println(itoa(product))
     
-    let factorial: int = c_calculate_factorial(5)
+    var factorial: int = c_calculate_factorial(5)
     print("c_calculate_factorial(5) = ")
     println(itoa(factorial))
     

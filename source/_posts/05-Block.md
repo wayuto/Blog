@@ -6,9 +6,9 @@ tags: Alum
 
 在`Alum`中，`{` `}`的作用不再局限于创建作用域或用于包裹函数体，他可以看作一个有多个表达式组成的复合表达式，这与`Rust`比较类似，同时它与普通的表达式别无二致，并且可以产生值。例如：
 ```alum
-let result: int = {
-    let n: int = 1
-    let m: int = 2
+var result: int = {
+    var n: int = 1
+    var m: int = 2
     n + m
 }
 ```
@@ -16,8 +16,8 @@ let result: int = {
 再例如，调用函数时传入的参数也可以是由`{}`包裹的表达式，例如
 ```alum
 F({
-    let a: int = 2
-    let b: int = 3
+    var a: int = 2
+    var b: int = 3
     a * b
 })
 ```
