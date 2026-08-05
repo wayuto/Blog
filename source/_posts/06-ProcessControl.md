@@ -45,7 +45,8 @@ else
     else_expr
 ```
 当条件`condition`成立，即值为`true`、非`0`值或非`nil`值时，则执行then_expr，否则就执行else_expr。  
-> 另外，`if-else`也能产生值，相当于`C语言`中的三元运算符`?:`。
+> 另外，`if-else`也能产生值，相当于`C语言`中的三元运算符`?:`。  
+
 当面临多个分支时，我们当然也可以用多个`if-else if-else`实现，但这未免太过繁琐，这时就可以使用`match`实现：
 ```
 $import "io.ah"
