@@ -67,10 +67,12 @@ fun func(n: int): void {
     }
 }
 
-fun main(): void {
+fun main(): int {
     for n in 0..3 {
         func(n)
     }
+
+    return 0
 }
 ```
 > 注：示例代码来自Alum/examples/26_match.al
