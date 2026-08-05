@@ -6,7 +6,7 @@ tags: Alum
 
 `变量`是一个语言中重要的部分，大多数`Toy Language`都会选择在实现四则计算后，实现变量的存储，`Alum`也不例外，在`Alum`中，变量的声明与初始化方式如下：
 ```alum
-var var: T = value
+var name: T = value
 ```
 例如，声明一个变量`i`，其类型为`int`，值为`1`，代码如下：
 ```alum
