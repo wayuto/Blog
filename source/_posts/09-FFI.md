@@ -4,18 +4,18 @@ date: 2026-02-28 19:49:16
 tags: Alum
 ---
 
-作为一个`Toy Language`，`Alum`的生态极为弱小，这限制了我们编写一些比较复杂的程序，我们可以通过`FFI`(Foreign Function Interface，即：外部函数接口)用其他语言为`Alum`编写拓展，这里最推荐的是`C语言`，因为`Alum`的数据在内存布局上与`C语言`几乎一致，不需要转换的开销。可以通过`extern`直接引入外部函数。  
+作为一个`Toy Language`，`Alum`的生态极为弱小，这限制了我们编写一些比较复杂的程序，我们可以通过`FFI`(Foreign Function Interface，即：外部函数接口)用其他语言为`Alum`编写拓展，这里最推荐的是`C语言`，因为`Alum`的数据在内存布局上与`C语言`几乎一致，不需要转换的开销。可以通过`fun(extern)`直接引入外部函数。  
 
-## `extern`关键字
-`extern`关键字是`Alum`与外部函数（不论是`Alum`还是其他语言）打交道的桥梁，它的语法如下：
+## `fun(extern)`关键字
+`fun(extern)`是`Alum`与外部函数（不论是`Alum`还是其他语言）打交道的桥梁，它的语法如下：
 ```alum
-extern F(PTn, ...): RT
+fun(extern) F(PTn, ...): RT
 ```
 例如，我们每次调用`println`函数都要`$import "io.ah"`，但其实，也可以通过
 ```alum
-extern println(string): void
+fun(extern) println(string): void
 ```
-的方式直接定义，但还是推荐引入`io.al`，这样更方便也更直观。
+的方式直接定义，但还是推荐引入`io.ah`，这样更方便也更直观。
 
 ## 与`C语言`的兼容性
 我们直接用示例介绍，还记得在[02-Installation](/2026/02/27/02-Installation/)中安装的`almk`工具吧？它可以很好的帮我们处理`Alum`与`C语言`的混合编译与连接问题。关于`almk`我们会在未来的章节讲解，下面是`Alum`与`C语言`混合编程的例子：  
@@ -44,9 +44,9 @@ includes = ["./include"]
 $ifndef HELPER_AL
 $define HELPER_AL nil
 
-extern c_add(int, int): int
-extern c_multiply(int, int): int
-extern c_calculate_factorial(int): int
+fun(extern) c_add(int, int): int
+fun(extern) c_multiply(int, int): int
+fun(extern) c_calculate_factorial(int): int
 
 $endif // HELPER_AL
 ```

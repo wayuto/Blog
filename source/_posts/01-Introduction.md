@@ -11,9 +11,9 @@ tags: Alum
 ## Hello world
 这是每个语言经典的第一个程序，对于`Alum`, 最简单的Hello world如下
 ```Alum
-$import "io.al" // 引入标准I/O函数(print, input, open, close, ...)
+$import "io.ah" // 引入标准I/O函数(print, input, open, close, ...)
 
-fun main() { // Alum语言的函数入口，与大多数语言一致
+fun main(): int { // Alum语言的函数入口，与大多数语言一致
     println("Hello world!") // print不换行，println自动换行
     return 0 // 返回程序退出状态码
 }

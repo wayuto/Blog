@@ -56,15 +56,17 @@ fun main(): int {
 ```
 > 注：示例代码来自Alum/examples/24_gen_type.al
 
-读到这里，我们就已经能写出很多实用的代码了，例如，通过已经学习的特性，我们可以自己实现一个`Vec`动态数组，这与`T[]`静态数组不同，它会自己扩充数组的容量，并且带边界检查，访问的索引越界时会返回`nil`，首先定义如下结构体：
+读到这里，我们就已经能写出很多实用的代码了，例如，通过已经学习的特性，我们可以自己实现一个`Vec`动态数组，这与`T[]`静态数组不同，它会自己扩充数组的容量，并且带边界检查，访问的索引越界时会返回`Nothing`，首先定义如下结构体：
 ```alum
 struct Vec<T> {
     data: T[],
     len: int,
     capacity: int,
-    at: T(*Vec<T>, int),
+    iter: int,
+    nth: Maybe<T>(*Vec<T>, int),
     push: void(*Vec<T>, T),
-    pop: T(*Vec<T>),
+    pop: Maybe<T>(*Vec<T>),
+    next: Maybe<T>(*Vec<T>),
     clear: void(*Vec<T>),
 }
 
@@ -73,9 +75,16 @@ fun vec_new<T>(): Vec<T> {
         data: [T; 0],
         len: 0,
         capacity: 0,
-		at: \(v: *Vec<T>, i: int): T {
-			if i >= v.len || i < 0 return nil
-			return v.data[i]
+        iter: 0,
+		nth: \(v: *Vec<T>, i: int): Maybe<T> {
+			if i >= v.len || i < 0 return Maybe<T> {
+				tag: Nothing,
+				value: nil
+			}
+			return Maybe<T> {
+				tag: Just,
+				value: v.data[i]
+			}
 		},
 		push: \(v: *Vec<T>, elem: T): void {
 			if v.len >= v.capacity {
@@ -94,11 +103,32 @@ fun vec_new<T>(): Vec<T> {
 			v.data[v.len] = elem
 			v.len = v.len + 1
 		},
-		pop: \(v: *Vec<T>): T {
-			if v.len == 0 return nil
+		pop: \(v: *Vec<T>): Maybe<T> {
+			if v.len == 0 return Maybe<T> {
+				tag: Nothing,
+				value: nil
+			}
 			v.len = v.len - 1
 			var elem: T = v.data[v.len]
-			return elem
+			return Maybe<T> {
+				tag: Just,
+				value: elem
+			}
+		},
+		next: \(v: *Vec<T>): Maybe<T> {
+			if v.iter >= v.len {
+				v.iter = 0
+				return Maybe<T> {
+					tag: Nothing,
+					value: nil
+				}
+			}
+			var elem: T = v.data[v.iter]
+			v.iter = v.iter + 1
+			return Maybe<T> {
+				tag: Just,
+				value: elem
+			}
 		},
 		clear: \(v: *Vec<T>): void {
 			v.len = 0
@@ -108,7 +138,7 @@ fun vec_new<T>(): Vec<T> {
 	}
 }
 ```
-在`Vec`中，我们使用`data`存储数据，类型为`T[]`，`len`为当前`Vec`的长度，`capacity`是`data`的实际长度，`at`、`push`、`pop`、`clear`则分别是函数指针，也是实现`Vec`的核心。然后，我们定义一个`new_vec()`函数来返回一个新的`Vec`：
+在`Vec`中，我们使用`data`存储数据，类型为`T[]`，`len`为当前`Vec`的长度，`capacity`是`data`的实际长度，`iter`则是与`next`配合使用的迭代游标，`nth`、`push`、`pop`、`next`、`clear`则分别是函数指针，也是实现`Vec`的核心。然后，我们定义一个`vec_new()`函数来返回一个新的`Vec`：
 ```alum
 
 ```
@@ -117,7 +147,7 @@ fun vec_new<T>(): Vec<T> {
 想要使用`Vec`容器，如下所示：
 ```alum
 $import "io.ah"
-$import "convert.ah"
+$import "maybe.ah"
 $import "vec.ah"
 
 // Vector Example
@@ -129,7 +159,12 @@ fun main(): int {
 	}
 	
 	for i in 0..10 {
-		println(itoa(v.at(&v, i)))
+		var m: Maybe<int> = v[i]
+		if m.tag == Just {
+			println(f"{m.value}")
+		} else {
+			println("out of bounds")
+		}
 	}
 	return 0
 }
