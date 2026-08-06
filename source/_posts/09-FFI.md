@@ -39,7 +39,7 @@ alc = "alc"
 cflags = "-Wall -O2 -nostdlib"
 includes = ["./include"]
 ```
-2. 接着创建目录`c_compat/include`，并将以下代码写入`helper.al`文件中：
+3. 接着创建目录`c_compat/include`，并将以下代码写入`helper.al`文件中：
 ```alum
 $ifndef HELPER_AL
 $define HELPER_AL nil
@@ -50,7 +50,7 @@ fun(extern) c_calculate_factorial(int): int
 
 $endif // HELPER_AL
 ```
-3. 并将以下代码写入`src/helper.c`文件中：
+4. 并将以下代码写入`src/helper.c`文件中：
 ```c
 #include "helper.h"
 
@@ -75,7 +75,7 @@ int c_calculate_factorial(int n) {
     return result;
 }
 ```
-4. 最后，修改`src/main.al`文件： 
+5. 最后，修改`src/main.al`文件： 
 ```alum
 $import "io.ah"
 $import "convert.ah"
@@ -97,7 +97,7 @@ fun main(): int {
     return 0
 }   
 ```
-5. 在终端进入`c_compat/`目录后执行`almk run`或者`almk build && ./target/c_compat`便能得到输出：
+6. 在终端进入`c_compat/`目录后执行`almk run`或者`almk build && ./target/c_compat`便能得到输出：
 ```bash
 c_add(10, 20) = 30
 c_multiply(5, 6) = 30

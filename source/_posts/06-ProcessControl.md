@@ -4,9 +4,9 @@ date: 2026-02-28 18:36:16
 tags: Alum
 ---
 
-相信熟悉计算机语言的读者都很熟悉这个概念，它是指通过控制程序执行的次序实现制定的功能，诸如：顺序，分支，循环，……在编程语言中则体现为`if-else`，`while`，`for`，`match`，……等等。下面是关于`Alum`中流程控制的介绍：  
+相信熟悉计算机语言的读者都很熟悉这个概念，它是指通过控制程序执行的次序来实现指定的功能，诸如：顺序，分支，循环，……在编程语言中则体现为`if-else`，`while`，`for`，`match`，……等等。下面是关于`Alum`中流程控制的介绍：  
 1. ## 顺序
-这是最简单的流程控制，就像一个算术时逐步计算每一步的结果，下面给出一个例子：
+这是最简单的流程控制，就像做算术时逐步计算每一步的结果，下面给出一个例子：
 ```alum
 $import "io.ah"
 $import "convert.ah" // 这其中包含了itoa，用于将数字转为字符串。
@@ -26,7 +26,7 @@ fun main(): int {
 我们的程序肯定不能一条路走到死，特别是当程序变得复杂的时候，例如，从终端读入用户输入的年龄并判断是否成年，我们便可以使用`if-else`来判断：
 ```alum
 $import "io.ah" // 这里包含了input函数，用于从终端接收输入
-$import "convert.ah" 这其中也包含了atoi，用于将字符串转为数字
+$import "convert.ah" // 这其中也包含了atoi，用于将字符串转为数字
 
 fun main(): int {
     var age: int = atoi(input("Enter your age"))
@@ -44,7 +44,7 @@ if condtion
 else
     else_expr
 ```
-当条件`condition`成立，即值为`true`、非`0`值或非`nil`值时，则执行then_expr，否则就执行else_expr。  
+当条件`condition`为`true`时，则执行`then_expr`，否则就执行`else_expr`（与许多动态语言不同，`Alum`要求`if`的条件必须是`bool`类型，不支持`非0`或`非nil`这类隐式真值）。  
 > 另外，`if-else`也能产生值，相当于`C语言`中的三元运算符`?:`。  
 
 当面临多个分支时，我们当然也可以用多个`if-else if-else`实现，但这未免太过繁琐，这时就可以使用`match`实现：
@@ -56,13 +56,13 @@ $import "io.ah"
 fun func(n: int): void {
     match n {
         0: {
-            println("`s` is equal to 0")
+            println("`n` is equal to 0")
         }
         1: {
-            println("`s` is equal to 1")
+            println("`n` is equal to 1")
         }
         _: {
-            println("`s` is not equal to 0 or 1")
+            println("`n` is not equal to 0 or 1")
         }
     }
 }
@@ -78,7 +78,7 @@ fun main(): int {
 > 注：示例代码来自Alum/examples/26_match.al
 
 
-1. ## 循环
+3. ## 循环
 为了介绍`循环`，我们来思考一个问题，如果要求你计算`1`到`100`的和，你应该怎么写程序？你当然可以这么写
 ```alum
 var sum: int = 1 + 2 + 3 + ... + 100
@@ -101,7 +101,7 @@ while i != 0 {
 while condition
     while_expr
 ```
-它的逻辑是，只要条件`condition`为真，就循环执行`while_expr`，但在这种单纯计算的例子上用while似乎有点麻烦，还要声明计数器`i`，每次还要让它减1,这似乎太麻烦了，于是我们便可以用`for`循环，它的语法如下：
+它的逻辑是，只要条件`condition`为真，就循环执行`while_expr`，但在这种单纯的计算例子上用`while`似乎有点麻烦，还要声明计数器`i`，每次还要让它减1，这似乎太麻烦了，于是我们便可以用`for`循环，它的语法如下：
 ```alum
 for i in n..m
     for_expr
@@ -121,4 +121,4 @@ for i in 1..100 {
     sum += i
 } // 另外需要注意的是，这里的i仅存在于for语句的作用域内，在for语句之外无法访问。
 ```
-这里的`for`语句，就可以看作是$\sum_{i=n}^{m}...$只不过不再仅仅局限于求和了
+这里的`for`语句，就可以看作是$\sum_{i=n}^{m}$的展开，只不过不再仅仅局限于求和了

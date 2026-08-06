@@ -9,7 +9,7 @@ tags: Alum
 ```alum
 union Union {
     member0: T0, 
-    member1: T0,
+    member1: T1,
     ...
 }
 ```
