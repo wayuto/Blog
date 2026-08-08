@@ -7,7 +7,6 @@ tags: Alum
 在[03-Types](/2026/02/27/03-Types)中我们介绍过，`Alum`中的`T[N]`也就是`C语言`中的`T[]`类型，其本质是一个[`指针`](/2026/03/01/11-Pointer)，指向数组第一个元素的地址。我们通过实例来说明`T[]`的用法：
 ```alum
 $import "io.ah"
-$import "convert.ah"
 
 // Arrays Example
 // Demonstrates array operations with new T[N] syntax
@@ -18,34 +17,30 @@ fun main(): int {
     var numbers: int[5] = [1, 2, 3, 4, 5]
 
     // Access array elements
-    println("First element: ")
-    println(itoa(numbers[0]))
+    println(f"First element: {numbers[0]}")
 
-    println("Third element: ")
-    println(itoa(numbers[2]))
+    println(f"Third element: {numbers[2]}")
 
     // Modify array elements
     numbers[0] = 10
     numbers[2] = 30
 
     println("After modification:")
-    println("First element: ")
-    println(itoa(numbers[0]))
+    println(f"First element: {numbers[0]}")
 
-    println("Third element: ")
-    println(itoa(numbers[2]))
+    println(f"Third element: {numbers[2]}")
 
     // Iterate through array using for loop
     // for loop now iterates over arrays directly
     println("All elements (using for loop):")
     for num in numbers {
-        println(itoa(num))
+        println(f"{num}")
     }
 
     // Range expression creates an array
     println("\nRange 0..5:")
     for i in 0..5 {
-        println(itoa(i))
+        println(f"{i}")
     }
 
     return 0
@@ -78,8 +73,7 @@ fun main(): int {
 
     println("Original array:")
     for i in 0..n {
-        print(itoa(numbers[i]))
-        print(" ")
+        print(f"{numbers[i]} ")
     }
     println("")
 
@@ -100,12 +94,10 @@ fun main(): int {
 
     println("Sorted array:")
     for i in 0..n {
-        print(itoa(numbers[i]))
-        print(" ")
+        print(f"{numbers[i]} ")
     }
     println("")
 
     return 0
 }
 ```
-> 注：示例代码来自Alum/examples/13_array_sort.al

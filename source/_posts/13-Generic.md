@@ -28,7 +28,6 @@ struct S<T> {
 这里，我们给出一个关于泛型简单的示例：
 ```alum
 $import "io.ah"
-$import "convert.ah"
 
 // Generic Type Example
 // Demonstrates generic functions with type parameters
@@ -42,14 +41,12 @@ fun main(): int {
     // Test 1: identity with integer
     var x: int = 42
     var result: int = identity(x)
-    println("identity(42) = ")
-    println(itoa(result))
+    println(f"identity(42) = {result}")
 
     // Test 2: identity with float
     var y: float = 3.14
     var f_result: float = identity(y)
-    println("identity(3.14) = ")
-    println(ftoa(f_result))
+    println(f"identity(3.14) = {f_result}")
 
     return 0
 }

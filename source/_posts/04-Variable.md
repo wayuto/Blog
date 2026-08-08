@@ -16,7 +16,6 @@ var i: int = 1
 下面给出一个关于变量的例子，出自`Alum/examples/02_variables.al`：
 ```alum
 $import "io.ah"
-$import "convert.ah"
 
 // Variables Example
 // Demonstrates variable declarations with different types
@@ -38,18 +37,10 @@ fun main(): int {
     var empty: int = nil
     
     // Print values
-    println("Name: ")
-    println(name)
-    println("Age: ")
-    println(itoa(age))
-    println("Pi: ")
-    println(ftoa(pi))
-    println("Is Student: ")
-    if is_student {
-        println("true")
-    } else {
-        println("false")
-    }
+    println(f"Name: {name}")
+    println(f"Age: {age}")
+    println(f"Pi: {pi}")
+    println(f"Is Student: {if is_student { "true" } else { "false" }}")
     
     return 0
 }

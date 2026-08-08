@@ -29,7 +29,6 @@ enum Token {
 下面是一个枚举的示例： 
 ```alum
 $import "io.ah"
-$import "convert.ah"
 
 // C-style enum with auto-incrementing and explicit values
 
@@ -61,27 +60,20 @@ fun color_name(c: Color): string {
 
 fun main(): int {
     // Values auto-increment unless explicitly set
-    print("RED = ")
-    println(itoa(Color.RED))      // 0
-    print("GREEN = ")
-    println(itoa(Color.GREEN))    // 5
-    print("BLUE = ")
-    println(itoa(Color.BLUE))     // 6
-    print("WHITE = ")
-    println(itoa(Color.WHITE))    // 11
+    println(f"RED = {Color.RED}")      // 0
+    println(f"GREEN = {Color.GREEN}")    // 5
+    println(f"BLUE = {Color.BLUE}")     // 6
+    println(f"WHITE = {Color.WHITE}")    // 11
 
     // Bare (C-style) member reference
-    print("NORTH = ")
-    println(itoa(NORTH))          // -1
+    println(f"NORTH = {NORTH}")          // -1
 
     // Enums are ints and work in expressions
     var next: int = Color.BLACK + 1
-    print("BLACK + 1 = ")
-    println(itoa(next))
+    println(f"BLACK + 1 = {next}")
 
     // Enums as function arguments and comparisons
-    print("color_name(BLUE) = ")
-    println(color_name(Color.BLUE))
+    println(f"color_name(BLUE) = {color_name(Color.BLUE)}")
 
     return 0
 }

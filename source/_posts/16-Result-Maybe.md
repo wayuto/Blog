@@ -38,13 +38,11 @@ struct Maybe<T> {
 ```alum
 $import "result.ah"
 $import "io.ah"
-$import "string.ah"
-$import "convert.ah"
 
 // Result Example
 
 fun auth(password: string): Result<int, string> {
-    if memcmp(password, "123456", 6) == 0 {
+    if password == "123456" {
         return Result<int, string> {
             result: Ok, 
             value: ResultValue<int, string> {
@@ -66,10 +64,10 @@ fun main(): int {
     var result = auth(password)
     match result.result {
         Ok: {
-            println(itoa(result.value.ok))
+            println(f"{result.value.ok}")
         }
         Err: {
-            println(result.value.err)
+            println(f"{result.value.err}")
         }
     }
     return 0    

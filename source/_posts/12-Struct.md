@@ -55,7 +55,6 @@ fun main(): int {
 下面给出一个示例：
 ```alum
 $import "io.ah"
-$import "convert.ah"
 
 // Struct declaration and using Example
 
@@ -69,7 +68,7 @@ fun main(): int {
         x: 1,
         y: 1
     }
-    println("Point(" + itoa(p.x) + ", " + itoa(p.y) +")")
+    println(f"Point({p.x}, {p.y})")
     return 0
 }
 ```

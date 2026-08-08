@@ -96,19 +96,16 @@ $import "helper.ah"
 
 fun main(): int {
     var sum: int = c_add(10, 20)
-    print("c_add(10, 20) = ")
-    println(itoa(sum))
+    println(f"c_add(10, 20) = {sum}")
     
     var product: int = c_multiply(5, 6)
-    print("c_multiply(5, 6) = ")
-    println(itoa(product))
+    println(f"c_multiply(5, 6) = {product}")
     
     var factorial: int = c_calculate_factorial(5)
-    print("c_calculate_factorial(5) = ")
-    println(itoa(factorial))
+    println(f"c_calculate_factorial(5) = {factorial}")
     
     return 0
-}   
+}
 ```
 7. 在终端进入`c_compat/`目录后执行`almk run`或者`almk build && ./target/c_compat`便能得到输出：
 ```bash
