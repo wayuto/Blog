@@ -13,7 +13,7 @@ fun(extern) F(PTn, ...): RT
 ```
 例如，我们每次调用`println`函数都要`$import "io.ah"`，但其实，也可以通过
 ```alum
-fun(extern) println(string): void
+fun(extern) println(string): int
 ```
 的方式直接定义，但还是推荐引入`io.ah`，这样更方便也更直观。
 
@@ -39,7 +39,7 @@ alc = "alc"
 cflags = "-Wall -O2 -nostdlib"
 includes = ["./include"]
 ```
-3. 接着创建目录`c_compat/include`，并将以下代码写入`helper.al`文件中：
+3. 接着创建目录`c_compat/include`，并将以下代码写入`helper.ah`文件中：
 ```alum
 $ifndef HELPER_AL
 $define HELPER_AL nil
@@ -50,7 +50,20 @@ fun(extern) c_calculate_factorial(int): int
 
 $endif // HELPER_AL
 ```
-4. 并将以下代码写入`src/helper.c`文件中：
+4. 并将以下代码写入`include/helper.h`文件中（供`helper.c`引入）：
+```c
+#ifndef HELPER_H
+#define HELPER_H
+
+// C Helper Functions
+
+int c_add(int a, int b);
+int c_multiply(int a, int b);
+int c_calculate_factorial(int n);
+
+#endif
+```
+5. 并将以下代码写入`src/helper.c`文件中：
 ```c
 #include "helper.h"
 
@@ -75,7 +88,7 @@ int c_calculate_factorial(int n) {
     return result;
 }
 ```
-5. 最后，修改`src/main.al`文件： 
+6. 最后，修改`src/main.al`文件： 
 ```alum
 $import "io.ah"
 $import "convert.ah"
@@ -97,7 +110,7 @@ fun main(): int {
     return 0
 }   
 ```
-6. 在终端进入`c_compat/`目录后执行`almk run`或者`almk build && ./target/c_compat`便能得到输出：
+7. 在终端进入`c_compat/`目录后执行`almk run`或者`almk build && ./target/c_compat`便能得到输出：
 ```bash
 c_add(10, 20) = 30
 c_multiply(5, 6) = 30

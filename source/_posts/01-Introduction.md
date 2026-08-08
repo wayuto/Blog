@@ -21,7 +21,7 @@ fun main(): int { // Alum语言的函数入口，与大多数语言一致
 将其保存为.al文件，并用alc编译运行，即可得到输出
 ```bash
 $ alc hello.al
-$ ./hello.al
+$ ./hello
 ```
 程序输出结果为：
 ```
