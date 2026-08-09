@@ -3,11 +3,7 @@ title: 18-编译时求值
 date: 2026-08-08 10:18:42
 tags: Alum
 ---
-在[17-函数注解](17-Function-Annotations.md)中我们了解了为纯函数添加`pure`注解可以在编译时求值，此章节我们详细介绍其`限制`与`原理`。  
-
-
-## 限制
-在`Alum 0.9.7`中，纯函数在编译期求值时暂不支持`数组操作`与`匿名函数`——字节码编译器尚未实现这两者的字节码指令，匿名函数还会被提升为普通函数而无法参与计算，未来的版本有`可能`会解决。并且`GosVM`只能计算编译时已经确定的量，如果涉及`命令行输入`，`文件读取`等操作，则无法生效。
+在[17-函数注解](17-Function-Annotations.md)中我们了解了为纯函数添加`pure`注解可以在编译时求值，此章节我们详细介绍`CTE`机制。  
 
 ## 原理
 `Alum`编译器在将`AST`转换为`IR`时，会先经过`GosVM`编译为字节码，并计算出部分结果，编译为`机器码`后仅剩下一个`常量`，在最新版本中，编译以下代码仅需要`10ms`左右：
@@ -147,3 +143,37 @@ Summary
 > 需要说明的是，`fib(40)`在两种语言中都是编译期完成计算的，因此上表中的`运行时间`主要反映进程启动与输出的开销，而非计算本身；`Alum`真正的优势在`编译时求值`阶段——`10ms`级的编译时间与`C++`的`28s`相比有数量级的差距。
 
 可以看出，在`编译时计算`这一特殊场景，`Alum`超越了`C++`这一高性能语言，拥有不俗的性能。
+
+## 调用外部函数
+在`Alum 0.9.7`中，`GosVM`被允许调用标记了`pure`的外部函数，例如：
+```alum
+fun(extern, pure) c_add(int, int): int
+```
+只需要在编译时提供`动态链接库`即可，例如编写一下`C`代码：
+```c
+int c_add(int a, int b) {
+    return a + b
+}
+```
+然后编译为`.so`：
+```bash
+$ gcc -shared -fPIC -o libcte.so main.c
+```
+并编写以下`Alum`代码：
+```alum
+$import "io.ah"
+fun(extern, pure) c_add(int, int): int
+
+fun main(): int {
+    println(f"{c_add(1, 2)}")
+    return 0
+}
+```
+然后编译：
+```bash
+$ alc --cte-lib ./libcte.so main.al
+```
+即可在编译时完成计算，并在运行时输出结果，但由于编译器无法检查外部函数时候真的无副作用，所以你会得到以下警告：
+```text
+warning: purity of external function 'c_add' cannot be verified
+```
