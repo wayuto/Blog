@@ -62,7 +62,12 @@ prismjs:
 index_generator:
   path: ''
   per_page: 5
-  order_by: title
+  order_by: -title
+
+# Archive page setting
+# order_by: Posts order. (Order by date descending by default)
+archive_generator:
+  order_by: -title
 
 # Category & Tag
 default_category: uncategorized
