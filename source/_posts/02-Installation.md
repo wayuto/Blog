@@ -4,7 +4,7 @@ date: 2026-02-27 12:13:25
 tags: Alum
 ---
 
-> `Alum`目前不具备跨平台性，仅支持x86_64 Linux平台
+> `Alum`目前不具备跨平台性，仅支持`x86_64 Linux`平台
 
 ## 安装Rust
 `Alum`不提供预编译的二进制文件，仅支持从源码编译安装，但`Alum`语言并不复杂，所以这不会花费很长时间。  
@@ -20,7 +20,7 @@ $ echo 'export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup' >
 并切换到`Bash`以进行安装
 ```bash
 $ bash
-$ rustup default stable # Alum 基于2024 edition，稳定版Rust即可
+$ rustup default stable
 ```
 
 ## 安装Alum
@@ -28,19 +28,12 @@ $ rustup default stable # Alum 基于2024 edition，稳定版Rust即可
 ```bash
 $ git clone https://github.com/wayuto/Alum.git --depth 1 ~/Alum
 ```
-克隆完毕后，进入目录内运行安装脚本，这会安装`alc`编译器，`almk`构建工具，以及`Alum`的标准库：
+克隆完毕后，进入目录内运行安装脚本，这会安装`alc`编译器，`alum-lsp`，`almk`构建工具，`Alum`的标准库，以及`VSCode`的拓展：
 ```bash
 $ cd ~/Alum
 $ sh ./install.sh
 ```
-然后，重新启动Shell, 就能使用`alc`, `almk`等程序了。  
+然后，重新启动Shell, 就能使用`alc`, `almk`等程序了
 
 ## 注意事项
-`Alum`使用`rust-lld`作为`linker`，为了使`alc`正常工作，请将`rust-lld`添加到`PATH`环境变量或软链接到`/usr/bin`:
-```bash
-$ sudo ln -s /home/$USER/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld /usr/bin
-# 或如果为nightly
-$ sudo ln -s /home/$USER/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld /usr/bin
-```
-
-为了更好的开发体验，使用`VSCode`时，可以从本地安装`~/Alum/alum-vscode/alum-vscode-xxx.vsix`，注意：这并不包含`LSP`，仅提供`Alum`语法高亮。
+`Alum`使用`lld`作为`链接器`，为了使`alc`正常工作，请先安装`lld`:
