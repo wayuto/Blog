@@ -36,5 +36,5 @@ fun fib(n: int): int {
 的运行效果是一样的，但还是推荐后者，这样具有更好的可读性。  
 
 
-在[20-移动与深拷贝](20-Move-DeepCopy.md)，你会看到`fun main() {}@void`的写法，因为，`Alum`中`{}`是一个表达式，转为`void`后就是`nil`，由于`nil`在`汇编`层面就是`0`，所以
+在[20-移动与深拷贝](/2026/08/25/20-Move-DeepCopy)，你会看到`fun main() {}@void`的写法，因为，`Alum`中`{}`是一个表达式，转为`void`后就是`nil`，由于`nil`在`汇编`层面就是`0`，所以
 `fun main() {}@void`等价于`fun main(): int { return 0 }`，省略函数类型标记表示函数返回值为空（`nil`）。
