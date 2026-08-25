@@ -27,7 +27,8 @@ struct S<T> {
 
 这里，我们给出一个关于泛型简单的示例：
 ```alum
-$import "io.ah"
+import io
+using io::println
 
 // Generic Type Example
 // Demonstrates generic functions with type parameters
@@ -140,9 +141,12 @@ fun vec_new<T>(): Vec<T> {
 
 想要使用`Vec`容器，如下所示：
 ```alum
-$import "io.ah"
-$import "maybe.ah"
-$import "vec.ah"
+import io
+using io::println
+import vec
+using vec::{Vec, vec_new}
+import maybe
+using maybe::Maybe
 
 // Vector Example
 
@@ -165,4 +169,4 @@ fun main(): int {
 ```
 > 注：示例代码来自Alum/examples/25_vector.al
 
-看到这个`$import "vec.ah"`相信读者已经能猜到，我们已经自己实现了`Alum`标准库中的`Vec`容器。
+看到这个`import vec`相信读者已经能猜到，我们已经自己实现了`Alum`标准库中的`Vec`容器。

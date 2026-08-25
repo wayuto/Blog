@@ -36,8 +36,10 @@ struct Maybe<T> {
 ```
 并给出`Result`相关示例：
 ```alum
-$import "result.ah"
-$import "io.ah"
+import result
+using result::{ResultStatus, ResultValue, Result}
+import io
+using io::{println, input}
 
 // Result Example
 

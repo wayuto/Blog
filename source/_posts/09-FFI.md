@@ -11,11 +11,11 @@ tags: Alum
 ```alum
 fun(extern) F(PTn, ...): RT
 ```
-例如，我们每次调用`println`函数都要`$import "io.ah"`，但其实，也可以通过
+例如，我们每次调用`println`函数都要先`import io`再`using io::println`，但其实，也可以通过
 ```alum
 fun(extern) println(string): int
 ```
-的方式直接定义，但还是推荐引入`io.ah`，这样更方便也更直观。
+的方式直接定义，但还是推荐直接`import io`，这样更方便也更直观。
 
 ## 与`C语言`的兼容性
 我们直接用示例介绍，还记得在[02-Installation](/2026/02/27/02-Installation/)中安装的`almk`工具吧？它可以很好的帮我们处理`Alum`与`C语言`的混合编译与连接问题。关于`almk`我们会在未来的章节讲解，下面是`Alum`与`C语言`混合编程的例子：  
@@ -41,14 +41,14 @@ includes = ["./include"]
 ```
 3. 接着创建目录`c_compat/include`，并将以下代码写入`helper.ah`文件中：
 ```alum
-$ifndef HELPER_AL
-$define HELPER_AL nil
+#ifndef HELPER_AL
+#define HELPER_AL nil
 
 fun(extern) c_add(int, int): int
 fun(extern) c_multiply(int, int): int
 fun(extern) c_calculate_factorial(int): int
 
-$endif // HELPER_AL
+#endif // HELPER_AL
 ```
 4. 并将以下代码写入`include/helper.h`文件中（供`helper.c`引入）：
 ```c
@@ -90,9 +90,10 @@ int c_calculate_factorial(int n) {
 ```
 6. 最后，修改`src/main.al`文件： 
 ```alum
-$import "io.ah"
-$import "convert.ah"
-$import "helper.ah"
+import helper
+using helper::{c_add, c_multiply, c_calculate_factorial}
+import io
+using io::println
 
 fun main(): int {
     var sum: int = c_add(10, 20)

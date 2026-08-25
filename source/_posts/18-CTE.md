@@ -8,7 +8,8 @@ tags: Alum
 ## 原理
 `Alum`编译器在将`AST`转换为`IR`时，会先经过`GosVM`编译为字节码，并计算出部分结果，编译为`机器码`后仅剩下一个`常量`，在最新版本中，编译以下代码仅需要`10ms`左右：
 ```alum
-$import "io.ah"
+import io
+using io::println
 
 fun(pure) fib(n: int): int {
     if n < 2 return n
@@ -92,7 +93,8 @@ int main() {
 
 
 ========= ./fib.al ==========
-$import "io.ah"
+import io
+using io::println
 
 fun(pure) fib(n: int): int {
     if n < 2 return n
@@ -161,7 +163,8 @@ $ gcc -shared -fPIC -o libcte.so main.c
 ```
 并编写以下`Alum`代码：
 ```alum
-$import "io.ah"
+import io
+using io::println
 fun(extern, pure) c_add(int, int): int
 
 fun main(): int {

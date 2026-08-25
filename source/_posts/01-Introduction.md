@@ -43,7 +43,7 @@ Source Code (.al)
         │
         ▼
 ┌───────────────┐
-│ Preprocessor  │  →  Handles import, $define, $ifdef, $ifndef, $endif
+│ Preprocessor  │  →  Handles #include, #define, #ifdef, #ifndef, #endif
 └───────────────┘
         │
         ▼

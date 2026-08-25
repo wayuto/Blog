@@ -6,7 +6,8 @@ tags: Alum
 
 在[03-Types](/2026/02/27/03-Types)中我们介绍过，`Alum`中的`T[N]`也就是`C语言`中的`T[]`类型，其本质是一个[`指针`](/2026/03/01/11-Pointer)，指向数组第一个元素的地址。我们通过实例来说明`T[]`的用法：
 ```alum
-$import "io.ah"
+import io
+using io::{println, print}
 
 // Arrays Example
 // Demonstrates array operations with new T[N] syntax
@@ -58,8 +59,10 @@ var V: T[N] = [Vn, ...]
 
 通过这几章的学习，我们已经可以使用`Alum`写出一个`冒泡排序算法`，这是一个经典的排序算法，特点是简单但低效：
 ```alum
-$import "io.ah"
-$import "convert.ah"
+import io
+using io::{println, print}
+import convert
+using convert::itoa
 
 // Array Sort Example
 // Demonstrates bubble sort algorithm

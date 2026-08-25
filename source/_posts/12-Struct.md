@@ -54,7 +54,8 @@ fun main(): int {
 这样就清晰多了，并且如果管理多个学生，可以存储到`Student[]`中，便能更轻松的管理，这不仅提高了`可读性`，也提高了`效率`。  
 下面给出一个示例：
 ```alum
-$import "io.ah"
+import io
+using io::println
 
 // Struct declaration and using Example
 

@@ -16,7 +16,8 @@ union Union {
 
 下面给出一个`Alum`中`共用体`的示例：
 ```alum
-$import "io.ah"
+import io
+using io::println
 
 // Union declaration and usage Example
 

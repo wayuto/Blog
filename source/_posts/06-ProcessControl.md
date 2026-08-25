@@ -8,8 +8,10 @@ tags: Alum
 1. ## 顺序
 这是最简单的流程控制，就像做算术时逐步计算每一步的结果，下面给出一个例子：
 ```alum
-$import "io.ah"
-$import "convert.ah" // 这其中包含了itoa，用于将数字转为字符串。
+import io
+using io::println
+import convert
+using convert::itoa // 这其中包含了itoa，用于将数字转为字符串。
 
 fun main(): int {
     var a: int = 1
@@ -25,8 +27,10 @@ fun main(): int {
 2. ## 分支
 我们的程序肯定不能一条路走到死，特别是当程序变得复杂的时候，例如，从终端读入用户输入的年龄并判断是否成年，我们便可以使用`if-else`来判断：
 ```alum
-$import "io.ah" // 这里包含了input函数，用于从终端接收输入
-$import "convert.ah" // 这其中也包含了atoi，用于将字符串转为数字
+import io
+using io::{println, input}
+import convert
+using convert::atoi
 
 fun main(): int {
     var age: int = atoi(input("Enter your age"))
@@ -49,7 +53,8 @@ else
 
 当面临多个分支时，我们当然也可以用多个`if-else if-else`实现，但这未免太过繁琐，这时就可以使用`match`实现：
 ```
-$import "io.ah"
+import io
+using io::println
 
 // Match Example
 

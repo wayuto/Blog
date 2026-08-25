@@ -9,11 +9,11 @@ tags: Alum
 当然，我们可以使用`宏定义`达到同样的目的，但是这不仅增加了`代码量`，也牺牲了`类型安全`。
 例如，编写一门编程语言时，我们通常需要定义很多`Token`，使用`宏定义`，我们可以写出以下代码：
 ```alum
-$define NUMBER 0
-$define PLUS   1
-$define MINUS  2
-$define MUL    3
-$define DIV    4
+#define NUMBER 0
+#define PLUS   1
+#define MINUS  2
+#define MUL    3
+#define DIV    4
 ```
 但如果使用枚举，我们可以写出以下代码：
 ```alum
@@ -28,7 +28,8 @@ enum Token {
 
 下面是一个枚举的示例： 
 ```alum
-$import "io.ah"
+import io
+using io::println
 
 // C-style enum with auto-incrementing and explicit values
 
