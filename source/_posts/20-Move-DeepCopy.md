@@ -39,8 +39,8 @@ using io::println
 
 fun main() {
     var s = "hello"
-    println(f"{s}")
-    println(f"{s}")
+    println(s)
+    println(s)
 }@void
 ```
 这段代码直接运行就会报错： 
@@ -53,8 +53,8 @@ using io::println
 
 fun main() {
     var s = "hello"
-    println(f"{$s}")
-    println(f"{s}")
+    println($s)
+    println(s)
 }@void
 ```
 就可以正常运行。
