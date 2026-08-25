@@ -45,7 +45,11 @@ fun main() {
 ```
 这段代码直接运行就会报错： 
 ```
-Code generation error: Use of moved value: 's' (moved at 1:1) no longer owns its data; assign it a new value or use '$' to copy before moving
+error: Code generation error: Use of moved value: 's' (moved at 5:13) no longer owns its data; assign it a new value or use '$' to copy before moving
+  --> /home/w/Projects/Blog/main.al:6:13
+   |
+  6 |     println(s)
+                   ^---
 ```
 这是因为在第一次`println`时， `s`的所有权已经被移走，再次使用就会造成`use-after-move`错误，为了避免这种情况，可以使用`$`操作符，他会重新使用`深拷贝`语义，所以只需要将代码修改为：
 ```
