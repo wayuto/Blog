@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生日庆祝</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    background: radial-gradient(1200px 800px at 50% 18%, #3b2a6b 0%, #1c1245 55%, #0d0924 100%);
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+    color: #fff;
+  }
+
+  canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+
+  /* ---------- 画面 ---------- */
+  .screen {
+    position: fixed; inset: 0; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 4vh;
+    opacity: 0; transition: opacity .8s ease; pointer-events: none;
+  }
+  .screen.active { opacity: 1; }
+
+  /* 画面1 · 开场 */
+  #screen1 .title { font-size: min(19vh, 19vw); font-weight: 900; letter-spacing: .08em; display: flex; gap: .1em; }
+  #screen1 .title span { display: inline-block; animation: floatChar 3s ease-in-out infinite; }
+  #screen1 .title span:nth-child(1) { color: #ffd86b; text-shadow: 0 0 40px rgba(255,216,107,.55); }
+  #screen1 .title span:nth-child(2) { color: #ff8fab; text-shadow: 0 0 40px rgba(255,143,171,.55); animation-delay: .2s; }
+  #screen1 .title span:nth-child(3) { color: #7ae7ff; text-shadow: 0 0 40px rgba(122,231,255,.55); animation-delay: .4s; }
+  #screen1 .title span:nth-child(4) { color: #ffb26b; text-shadow: 0 0 40px rgba(255,178,107,.55); animation-delay: .6s; }
+  #screen1 .subtitle { margin-top: 5vh; font-size: min(5.5vh, 5.5vw); color: #e8e2ff; opacity: .95; }
+
+  /* 画面2 · 寿星 */
+  .label {
+    font-size: min(5vh, 5vw); letter-spacing: .35em; text-indent: .35em;
+    color: #ffd86b; margin-bottom: 4vh; font-weight: 700;
+  }
+  .names { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 3vw; line-height: 1.15; }
+  .names .name {
+    font-weight: 900; color: #fff;
+    text-shadow: 0 0 30px rgba(255,216,107,.7), 0 0 80px rgba(255,143,171,.4);
+    animation: popIn .7s cubic-bezier(.2,1.4,.4,1) backwards;
+  }
+  #screen2 .wish { margin-top: 5vh; font-size: min(5.5vh, 5.5vw); color: #ffe9f2; animation: glow 2s ease-in-out infinite; }
+
+  /* 画面3 · 全班祝福 */
+  #screen3 .bigwish { font-size: min(9vh, 9vw); font-weight: 900; color: #ffd86b; text-shadow: 0 0 40px rgba(255,216,107,.5); }
+  #screen3 .triple { margin-top: 4vh; font-size: min(7vh, 7vw); font-weight: 700; color: #fff; animation: glow 1.6s ease-in-out infinite; }
+
+  /* 待机 */
+  #standby .standby-cake { font-size: min(18vh, 18vw); animation: floatChar 3s ease-in-out infinite; }
+  #standby .standby-text { margin-top: 4vh; font-size: min(8vh, 8vw); font-weight: 700; color: #cfc6ff; }
+  #standby .standby-sub { margin-top: 2vh; font-size: min(4.5vh, 4.5vw); color: #9a8fd0; }
+
+  /* ---------- 启动按钮 ---------- */
+  #startOverlay {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4vh;
+    background: rgba(10, 6, 30, .55); backdrop-filter: blur(6px);
+  }
+  #startOverlay .cake { font-size: min(20vh, 20vw); animation: floatChar 2.5s ease-in-out infinite; }
+  #startBtn {
+    font-size: min(7vh, 7vw); font-weight: 900; color: #4a2500;
+    padding: .45em 1.6em; border: none; border-radius: 2em; cursor: pointer;
+    background: linear-gradient(135deg, #ffe27a, #ffb347);
+    box-shadow: 0 0 45px rgba(255, 200, 90, .65), 0 10px 30px rgba(0,0,0,.4);
+    animation: pulse 1.8s ease-in-out infinite;
+    font-family: inherit;
+  }
+  #startBtn:hover { transform: scale(1.05); }
+  #startOverlay .hint { font-size: min(3.6vh, 3.6vw); color: #b9aee8; }
+
+  /* ---------- 名单编辑 ---------- */
+  #editBtn {
+    position: fixed; top: 2.4vh; right: 2.4vw; z-index: 30;
+    font-size: min(5.5vh, 5.5vw); line-height: 1;
+    background: none; border: none; cursor: pointer;
+    opacity: .5; transition: opacity .25s, transform .4s;
+    color: #ffd86b; filter: drop-shadow(0 0 8px rgba(255,216,107,.4));
+  }
+  #editBtn:hover { opacity: 1; transform: rotate(90deg); }
+  #editOverlay {
+    position: fixed; inset: 0; z-index: 40;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(10, 6, 30, .7); backdrop-filter: blur(6px);
+  }
+  .edit-panel {
+    width: min(560px, 88vw);
+    display: flex; flex-direction: column; gap: 2.4vh;
+    padding: 4.5vh 3.5vw;
+    background: linear-gradient(160deg, #2c1f5e, #1a1140);
+    border: 1px solid rgba(255,216,107,.35);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .edit-panel h2 { color: #ffd86b; font-size: min(4.5vh, 6vw); letter-spacing: .2em; }
+  .edit-panel .edit-hint { color: #9a8fd0; font-size: min(2.8vh, 3.4vw); }
+  #editArea {
+    width: 100%; height: 30vh; resize: none;
+    border: 1px solid rgba(255,255,255,.2); border-radius: 12px;
+    background: rgba(0,0,0,.25); color: #fff;
+    font-family: inherit; font-size: min(3.4vh, 4.2vw); line-height: 1.7;
+    padding: 1em 1.2em;
+  }
+  #editArea:focus { outline: none; border-color: #ffd86b; box-shadow: 0 0 15px rgba(255,216,107,.25); }
+  .edit-actions { display: flex; gap: 2.5vw; justify-content: center; }
+  .edit-actions button {
+    font-family: inherit; font-weight: 700; cursor: pointer;
+    font-size: min(3.2vh, 4vw); padding: .5em 1.8em; border: none; border-radius: 2em;
+  }
+  #editSave {
+    color: #4a2500; background: linear-gradient(135deg, #ffe27a, #ffb347);
+    box-shadow: 0 0 25px rgba(255,200,90,.5);
+  }
+  #editCancel { color: #e8e2ff; background: rgba(255,255,255,.12); }
+
+  @keyframes floatChar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3vh); } }
+  @keyframes popIn { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
+  @keyframes glow {
+    0%, 100% { text-shadow: 0 0 25px rgba(255,216,107,.55); }
+    50% { text-shadow: 0 0 60px rgba(255,143,171,.85), 0 0 25px rgba(255,216,107,.55); }
+  }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 45px rgba(255,200,90,.65), 0 10px 30px rgba(0,0,0,.4); } 50% { box-shadow: 0 0 80px rgba(255,200,90,.95), 0 10px 30px rgba(0,0,0,.4); } }
+</style>
+<script>window.__STARS__ = ["董家鳞","王矿辉"];</script>
+</head>
+<body>
+
+<canvas id="fx"></canvas>
+
+<!-- 画面 1 · 开场 -->
+<section class="screen active" id="screen1">
+  <h1 class="title"><span>生</span><span>日</span><span>快</span><span>乐</span></h1>
+  <div class="subtitle" id="dateLine"></div>
+</section>
+
+<!-- 画面 2 · 寿星 -->
+<section class="screen" id="screen2">
+  <div class="label">今天的小寿星</div>
+  <div class="names" id="starNames"></div>
+  <div class="wish" id="wishLine"></div>
+</section>
+
+<!-- 画面 3 · 全班祝福 -->
+<section class="screen" id="screen3">
+  <div class="bigwish">全班同学祝你</div>
+  <div class="triple">学业进步 · 健康快乐 · 心想事成</div>
+</section>
+
+<!-- 待机 -->
+<section class="screen" id="standby">
+  <div class="standby-cake">🎂</div>
+  <div class="standby-text">今天没有寿星</div>
+  <div class="standby-sub">期待下一次生日会</div>
+</section>
+
+<!-- 启动层(解决浏览器禁止自动播放声音的限制) -->
+<div id="startOverlay">
+  <div class="cake">🎂</div>
+  <button id="startBtn">▶ 开始庆祝</button>
+  <div class="hint">点击后自动全屏播放 · 再次点击页面可退出全屏</div>
+</div>
+
+<!-- 名单编辑 -->
+<button id="editBtn" title="修改寿星名单">⚙</button>
+<div id="editOverlay">
+  <div class="edit-panel">
+    <h2>寿星名单</h2>
+    <div class="edit-hint" id="editHint">每行一个名字,清空则进入待机画面</div>
+    <textarea id="editArea" spellcheck="false"></textarea>
+    <div class="edit-actions">
+      <button id="editSave">保存</button>
+      <button id="editCancel">取消</button>
+    </div>
+  </div>
+</div>
+
+<!--STARS_DATA-->
+<script>
+"use strict";
+
+// ================= 状态 =================
+let names = [];          // 当前寿星
+let started = false;     // 是否已点击"开始庆祝"
+let hasStars = false;    // 名单是否非空
+let screenIdx = 0;
+let rotateTimer = null;
+let fireworksTimer = null;
+
+const $ = (id) => document.getElementById(id);
+const SCREENS = ["screen1", "screen2", "screen3"];
+
+// ================= 数据 =================
+// 双模式自动探测:有后端 API 用 API;静态托管读本目录 JSON;file:// 打开用内置名单
+let serverMode = false;
+
+async function refreshStars() {
+  if (serverMode) {
+    try {
+      const res = await fetch("/api/stars");
+      const data = await res.json();
+      applyStars(Array.isArray(data.birthdayStar) ? data.birthdayStar : []);
+    } catch { /* 网络波动时保持现状 */ }
+    return;
+  }
+  // 静态模式:本浏览器保存过的编辑优先
+  const local = localStorage.getItem("birthdayStars");
+  if (local) {
+    try { applyStars(JSON.parse(local)); return; } catch { /* 忽略坏数据 */ }
+  }
+  // 静态托管:读取同目录 birthdayStars.json(改文件即时生效)
+  try {
+    const res = await fetch("birthdayStars.json", { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      applyStars(Array.isArray(data.birthdayStar) ? data.birthdayStar : []);
+      return;
+    }
+  } catch { /* file:// 下 fetch 被浏览器禁止,走内置名单 */ }
+  if (Array.isArray(window.__STARS__)) applyStars(window.__STARS__);
+}
+
+// 启动时探测模式
+(async () => {
+  try {
+    const res = await fetch("/api/stars");
+    if (res.ok) {
+      const data = await res.json(); // 返回不是 JSON(如兜底页)则视为无后端
+      if (data && Array.isArray(data.birthdayStar)) serverMode = true;
+    }
+  } catch { /* 无后端 */ }
+  refreshStars();
+  setInterval(refreshStars, 5000); // 每 5 秒同步名单,改 JSON 即时生效
+})();
+
+function applyStars(list) {
+  const changed = JSON.stringify(list) !== JSON.stringify(names);
+  names = list;
+  hasStars = list.length > 0;
+
+  // 待机 ↔ 庆祝 切换
+  $("standby").classList.toggle("active", !hasStars);
+  $("startOverlay").style.display = hasStars && !started ? "flex" : "none";
+  if (hasStars) {
+    for (const id of SCREENS) $(id).style.display = "";
+    if (!started) { showScreen(0); ensureRotate(); }
+    renderNames();
+  } else {
+    stopCelebrate();
+  }
+  if (changed && hasStars) { burstAll(); }  // 名单有变化时来一波礼花
+}
+
+function renderNames() {
+  const box = $("starNames");
+  box.innerHTML = "";
+  names.forEach((n, i) => {
+    const el = document.createElement("div");
+    el.className = "name";
+    el.textContent = n;
+    el.style.animationDelay = (i * 0.25) + "s";
+    box.appendChild(el);
+  });
+  // 人数越多字号越小,保证大屏不溢出
+  box.style.fontSize = names.length === 1 ? "min(20vh, 26vw)"
+    : names.length === 2 ? "min(13vh, 16vw)"
+    : "min(9vh, 11vw)";
+  $("wishLine").textContent = names.length > 1
+    ? "祝你们生日快乐,天天开心!"
+    : "祝你生日快乐,天天开心!";
+}
+
+// ================= 轮播 =================
+function showScreen(i) {
+  screenIdx = i;
+  SCREENS.forEach((id, k) => $(id).classList.toggle("active", k === i));
+  if (SCREENS[i] === "screen3") fireworksShow();
+}
+
+function ensureRotate() {
+  if (rotateTimer) return;
+  rotateTimer = setInterval(() => {
+    if (!celebrating()) return;
+    showScreen((screenIdx + 1) % SCREENS.length);
+  }, 9000);
+}
+
+function stopCelebrate() {
+  $("screen1").classList.remove("active");
+  $("screen2").classList.remove("active");
+  $("screen3").classList.remove("active");
+  if (fireworksTimer) { clearTimeout(fireworksTimer); fireworksTimer = null; }
+}
+
+function celebrating() { return started && hasStars; }
+
+// ================= 音乐(Web Audio 合成生日歌,无需音频文件) =================
+const FREQ = { G4: 392.00, A4: 440.00, B4: 493.88, C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99 };
+// [音名, 拍数] —— 祝你生日快乐
+const MELODY = [
+  ["G4", .75], ["G4", .25], ["A4", 1], ["G4", 1], ["C5", 1], ["B4", 2],
+  ["G4", .75], ["G4", .25], ["A4", 1], ["G4", 1], ["D5", 1], ["C5", 2],
+  ["G4", .75], ["G4", .25], ["G5", 1], ["E5", 1], ["C5", 1], ["B4", 1], ["A4", 2],
+  ["F5", .75], ["F5", .25], ["E5", 1], ["C5", 1], ["D5", 1], ["C5", 2.5],
+];
+const BEAT = 0.55; // 每拍秒数
+
+let audioCtx = null;
+let songTimer = null;
+
+function playNote(ctx, master, freq, t, dur) {
+  for (const [type, detune, gain] of [["triangle", 0, 1], ["sine", 3, 0.35]]) {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq + detune;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.16 * gain, t + 0.03);
+    g.gain.setValueAtTime(0.16 * gain, t + Math.max(0.04, dur - 0.06));
+    g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    osc.connect(g); g.connect(master);
+    osc.start(t); osc.stop(t + dur + 0.05);
+  }
+}
+
+function scheduleSong() {
+  if (!audioCtx || !celebrating()) return;
+  const ctx = audioCtx;
+  const master = ctx.createGain();
+  master.gain.value = 0.55;
+  master.connect(ctx.destination);
+
+  const t0 = ctx.currentTime + 0.15;
+  let t = t0;
+  for (const [n, beats] of MELODY) {
+    const dur = beats * BEAT;
+    playNote(ctx, master, FREQ[n], t, dur * 0.92);
+    t += dur;
+  }
+  const loopMs = (t - t0 + 2.2) * 1000;
+  songTimer = setTimeout(scheduleSong, loopMs);
+}
+
+function startAudio() {
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    scheduleSong();
+  } catch { /* 无声环境(如无音频设备)下仅播放画面 */ }
+}
+
+// ================= 彩带 & 礼花 =================
+const cvs = $("fx");
+const ctx2d = cvs.getContext("2d");
+let W = 0, H = 0;
+function resize() { W = cvs.width = innerWidth; H = cvs.height = innerHeight; }
+addEventListener("resize", resize); resize();
+
+const COLORS = ["#ffd700", "#ff6b6b", "#4ecdc4", "#ff9f43", "#a29bfe", "#f368e0", "#54a0ff", "#ffd32a"];
+const confetti = [];
+for (let i = 0; i < 90; i++) confetti.push(newConfetti(true));
+
+function newConfetti(anywhere) {
+  return {
+    x: Math.random() * W,
+    y: anywhere ? Math.random() * H : -20 - Math.random() * H * 0.3,
+    w: 7 + Math.random() * 8,
+    h: 4 + Math.random() * 5,
+    vy: 1.4 + Math.random() * 2.6,
+    sway: Math.random() * Math.PI * 2,
+    swaySpeed: 0.02 + Math.random() * 0.04,
+    rot: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.15,
+    color: COLORS[(Math.random() * COLORS.length) | 0],
+  };
+}
+
+const sparks = [];
+function burst(x, y, count = 70) {
+  const hue = (Math.random() * 360) | 0;
+  for (let i = 0; i < count; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const sp = 2 + Math.random() * 5;
+    sparks.push({
+      x, y,
+      vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      life: 1, decay: 0.011 + Math.random() * 0.012,
+      color: `hsl(${hue + Math.random() * 40 - 20}, 100%, ${58 + ((Math.random() * 20) | 0)}%)`,
+      size: 2 + Math.random() * 2.6,
+    });
+  }
+}
+
+function fireworksShow() {
+  const pts = [[0.3, 0.32], [0.7, 0.28], [0.5, 0.42], [0.2, 0.55], [0.8, 0.5]];
+  pts.forEach(([px, py], i) => setTimeout(() => {
+    if (celebrating()) burst(W * px, H * py, 70 + ((Math.random() * 30) | 0));
+  }, i * 550));
+}
+
+function burstAll() {
+  if (!celebrating()) return;
+  burst(W * 0.5, H * 0.4, 120);
+}
+
+function loop() {
+  requestAnimationFrame(loop);
+  ctx2d.clearRect(0, 0, W, H);
+  if (!celebrating()) return;
+
+  for (const p of confetti) {
+    p.y += p.vy;
+    p.sway += p.swaySpeed;
+    p.x += Math.sin(p.sway) * 1.2;
+    p.rot += p.rotSpeed;
+    if (p.y > H + 20) Object.assign(p, newConfetti(false));
+    ctx2d.save();
+    ctx2d.translate(p.x, p.y);
+    ctx2d.rotate(p.rot);
+    ctx2d.fillStyle = p.color;
+    ctx2d.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    ctx2d.restore();
+  }
+
+  for (let i = sparks.length - 1; i >= 0; i--) {
+    const s = sparks[i];
+    s.x += s.vx; s.y += s.vy;
+    s.vy += 0.045; s.vx *= 0.985; s.vy *= 0.985;
+    s.life -= s.decay;
+    if (s.life <= 0) { sparks.splice(i, 1); continue; }
+    ctx2d.globalAlpha = s.life;
+    ctx2d.fillStyle = s.color;
+    ctx2d.beginPath();
+    ctx2d.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx2d.fill();
+  }
+  ctx2d.globalAlpha = 1;
+}
+loop();
+
+// ================= 启动 =================
+$("startBtn").addEventListener("click", () => {
+  started = true;
+  $("startOverlay").style.display = "none";
+  document.documentElement.requestFullscreen?.().catch(() => {});
+  startAudio();
+  showScreen(0);
+  ensureRotate();
+  burstAll();
+});
+
+// ================= 名单编辑 =================
+const editOverlay = $("editOverlay");
+
+// ---- 静态模式:把名单写回本地 birthdayStars.json ----
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open("birthdayCard", 1);
+    req.onupgradeneeded = () => req.result.createObjectStore("kv");
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function idbGet(key) {
+  const db = await idbOpen();
+  return new Promise((resolve) => {
+    const req = db.transaction("kv").objectStore("kv").get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => resolve(undefined);
+  });
+}
+async function idbSet(key, val) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("kv", "readwrite");
+    tx.objectStore("kv").put(val, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function jsonText(list) {
+  return JSON.stringify({ birthdayStar: list }, null, 2) + "\n";
+}
+
+// 不支持直接写文件时(Firefox/Safari),退化为下载
+function downloadJson(list) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([jsonText(list)], { type: "application/json" }));
+  a.download = "birthdayStars.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// 优先写回上次选过的文件;首次弹出保存框让用户选择 birthdayStars.json
+async function saveJsonFile(list) {
+  if (!window.showSaveFilePicker) { downloadJson(list); return; }
+  try {
+    let handle = await idbGet("starsFile");
+    if (handle) {
+      const perm = await handle.queryPermission({ mode: "readwrite" });
+      if (perm !== "granted") {
+        handle = (await handle.requestPermission({ mode: "readwrite" })) === "granted"
+          ? handle : null;
+      }
+    }
+    if (!handle) {
+      handle = await window.showSaveFilePicker({
+        suggestedName: "birthdayStars.json",
+        types: [{ description: "JSON 文件", accept: { "application/json": [".json"] } }],
+      });
+      await idbSet("starsFile", handle);
+    }
+    const w = await handle.createWritable();
+    await w.write(jsonText(list));
+    await w.close();
+  } catch (e) {
+    if (e && e.name !== "AbortError") downloadJson(list); // 用户取消则静默,其他失败退化为下载
+  }
+}
+
+$("editBtn").addEventListener("click", () => {
+  $("editArea").value = names.join("\n");
+  $("editHint").textContent = serverMode
+    ? "每行一个名字,清空则进入待机画面"
+    : "每行一个名字 · 保存到当前浏览器并写回 birthdayStars.json(首次需选择文件)";
+  editOverlay.style.display = "flex";
+  $("editArea").focus();
+});
+
+$("editCancel").addEventListener("click", () => {
+  editOverlay.style.display = "none";
+});
+
+editOverlay.addEventListener("click", (e) => {
+  if (e.target === editOverlay) editOverlay.style.display = "none";
+});
+
+$("editSave").addEventListener("click", async () => {
+  const list = [...new Set(
+    $("editArea").value.split("\n").map((s) => s.trim()).filter(Boolean),
+  )];
+  editOverlay.style.display = "none";
+  applyStars(list);              // 先本地生效
+  if (serverMode) {
+    try {
+      const res = await fetch("/api/stars", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ birthdayStar: list }),
+      });
+      if (!res.ok) console.error("保存名单失败");
+    } catch { /* 服务不可用,保留本地显示 */ }
+  } else {
+    // 静态模式:本浏览器记住显示内容,并尽量写回 birthdayStars.json 文件
+    localStorage.setItem("birthdayStars", JSON.stringify(list));
+    saveJsonFile(list);
+  }
+});
+
+// 顶部日期
+{
+  const d = new Date();
+  $("dateLine").textContent = `${d.getMonth() + 1}月${d.getDate()}日 · 今天是我们班的生日会`;
+}
+</script>
+</body>
+</html>
