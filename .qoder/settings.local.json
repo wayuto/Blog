@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sS -m 15 -o /dev/null -w \"HTTP %{http_code} | time %{time_total}s | remote %{remote_ip} | %{url_effective}\\\\n\" -L https://cr0.dpdns.org/cell; echo \"---\"; curl -sS -m 15 -I https://cr0.dpdns.org 2>&1 | head -20)",
+      "Bash(getent hosts cr0.dpdns.org; echo \"exit=$?\")",
+      "Bash(for p in \"/cell\" \"/cell/\" \"/cell/index.html\" \"/posts/cell\" \"/blog/cell\"; do printf \"%-22s -> \" \"$p\"; curl -sS -m 15 -o /dev/null -w \"%{http_code}\\\\n\" -L \"https://cr0.dpdns.org$p\"; done)",
+      "Bash(ls -a; echo \"=== config files ===\"; ls *.json *.toml *.yaml *.yml *.config.* 2>/dev/null)",
+      "Bash(echo \"=== source posts mentioning cell ===\"; ls -la source/_posts/ 2>/dev/null | grep -i cell; echo \"=== grep in source ===\"; grep -rli \"cell\" source/ --include=\"*.md\" 2>/dev/null | head; echo \"=== public build output ===\"; ls public/ 2>/dev/null | head -30; echo \"=== public/cell? ===\"; ls -la public/cell 2>/dev/null || echo \"NO public/cell\")",
+      "Bash(cd /home/w/Projects/Blog; echo \"=== .gitignore ===\"; cat .gitignore; echo; echo \"=== is public tracked? ===\"; git ls-files public | head -5; echo \"count: $\\(git ls-files public | wc -l\\)\"; echo; echo \"=== tracked files under public/cell ===\"; git ls-files public/cell | head -20; echo \"count: $\\(git ls-files public/cell | wc -l\\)\")",
+      "Bash(cd /home/w/Projects/Blog; echo \"=== diff of 75b2ca8 and 9fba450 ===\"; git show 75b2ca8 -- _config.yml | tail -20; echo \"-----\"; git show 9fba450 -- _config.yml | tail -20; echo \"=== deploy section ===\"; sed -n '100,130p' _config.yml)",
+      "Bash(cd /home/w/Projects/Blog; echo \"=== source tree \\(top level\\) ===\"; ls -la source/; echo \"=== birthday in source ===\"; find source -maxdepth 3 -path \"*birthday*\" | head -20; echo \"=== live /birthday ===\"; curl -sS -m 15 -o /dev/null -w \"%{http_code}\\\\n\" -L https://cr0.dpdns.org/birthday/)",
+      "Bash(cd /home/w/Projects/Blog; echo \"=== remotes ===\"; git remote -v; echo \"=== edgeone-ish files ===\"; ls -a | grep -i edge; find . -maxdepth 2 -name \"*.edgeone*\" -o -maxdepth 2 -name \"edgeone*\" 2>/dev/null | grep -v node_modules | head; echo \"=== unpushed? ===\"; git log --oneline @{u}..HEAD 2>&1 | head -5; echo \"=== public/cell/index.html ===\"; cat public/cell/index.html)",
+      "Bash(cd /home/w/Projects/Blog; echo \"=== size of public/cell ===\"; du -sh public/cell; du -ah public/cell | sort -rh | head -15; echo \"=== _config.yml 24-34 ===\"; sed -n '24,34p' _config.yml | cat -n)",
+      "Bash(cd /home/w/Projects/Blog; mv public/cell source/cell && echo \"moved OK\"; ls source/cell; echo \"=== public/cell gone? ===\"; ls public/ | grep -c cell || echo \"0 \\(removed by mv\\)\")",
+      "Bash(cd /home/w/Projects/Blog; npx hexo clean >/dev/null 2>&1; npx hexo generate 2>&1 | tail -5; echo \"=== built? ===\"; ls public/ | head -20; echo \"--- cell ---\"; ls public/cell 2>/dev/null && head -3 public/cell/index.html; echo \"--- birthday still ok? ---\"; ls public/birthday/index.html 2>/dev/null || echo \"MISSING birthday\")",
+      "Bash(cd /home/w/Projects/Blog; echo \"=== would be ignored? ===\"; git check-ignore -v source/cell/models/dna.glb source/cell/index.html 2>/dev/null || echo \"not ignored \\(good\\)\"; echo \"=== status ===\"; git status --short; echo \"=== files to add ===\"; git add -An source/cell 2>/dev/null | wc -l; git diff --stat _config.yml)",
+      "Bash(ls && git log --oneline -3 --stat | head -50)",
+      "Bash(cat source/cell/index.html; echo \"-----\"; ls public/ | head -30; echo \"-----\"; ls public/cell 2>/dev/null || echo \"no public/cell\"; echo \"-----\"; git show c13f25a -- _config.yml)",
+      "Bash(cd /home/w/Projects/Blog; curl -sSI https://cr0.dpdns.org/cell 2>&1 | head -20; echo \"=== /cell/ ===\"; curl -sSI https://cr0.dpdns.org/cell/ 2>&1 | head -20)",
+      "Bash(cd /home/w/Projects/Blog; grep -o '\"\\\\.\\\\?/\\\\\\(images\\\\|models\\\\|draco\\\\\\)/[^\"]*\"' source/cell/assets/index-CtD6mpyT.js | sort -u | head -30; echo \"=== other occurrences ===\"; grep -o '\\\\\\(images\\\\|models\\\\|draco\\\\\\)/[A-Za-z0-9._-]*' source/cell/assets/index-CtD6mpyT.js | sort -u | head -40)",
+      "Bash(cd /home/w/Projects/Blog; grep -o '.\\\\{70\\\\}models/dna\\\\.glb.\\\\{40\\\\}' source/cell/assets/index-CtD6mpyT.js | head -3; echo \"===images===\"; grep -o '.\\\\{60\\\\}images/dna\\\\.jpg.\\\\{40\\\\}' source/cell/assets/index-CtD6mpyT.js | head -3; echo \"===draco===\"; grep -o '.\\\\{80\\\\}draco/.\\\\{60\\\\}' source/cell/assets/index-CtD6mpyT.js | head -3)",
+      "Bash(cd /home/w/Projects/Blog; grep -o 'x=\\\\\\([^,;]\\\\{1,120\\\\}\\\\\\)' source/cell/assets/index-CtD6mpyT.js | head -5; echo \"=== find `x=` as function ===\"; grep -o '.\\\\{200\\\\}modelUrl:x\\(`models/dna\\\\.glb`\\)' source/cell/assets/index-CtD6mpyT.js | head -1)",
+      "Bash(cd /home/w/Projects/Blog; grep -o '.\\\\{60\\\\}new URL\\(.\\\\{80\\\\}' source/cell/assets/index-CtD6mpyT.js | head -5)",
+      "Bash(cd /home/w/Projects/Blog; grep -c 'cell' source/cell/assets/index-CtD6mpyT.js; grep -o '.\\\\{80\\\\}modelUrl:x\\(`models/dna' source/cell/assets/index-CtD6mpyT.js | head -1 | cut -c1-200; echo \"=== try find 'x=`' or 'x=e=>' ===\"; grep -o 'x=[^,;\\)]\\\\{0,60\\\\}=>' source/cell/assets/index-CtD6mpyT.js | head -10)",
+      "Bash(cd /home/w/Projects/Blog; grep -o 'url\\([^\\)]*\\)' source/cell/assets/index-D-M5S2cM.css | sort -u | head -20; echo \"=== bundle base helper ===\"; grep -o 'j_=.\\\\{0,30\\\\}' source/cell/assets/index-CtD6mpyT.js | head -5)",
+      "Bash(cd /home/w/Projects/Blog && npx hexo generate 2>&1 | tail -5 && head -20 public/cell/index.html)",
+      "Bash(cd /home/w/Projects/Blog; for f in public/cell/assets/index-CtD6mpyT.js public/cell/assets/index-D-M5S2cM.css public/cell/favicon.svg public/cell/draco/draco_decoder.wasm public/cell/models/dna.glb public/cell/images/dna.jpg; do [ -f \"$f\" ] && echo \"OK  $f\" || echo \"MISS $f\"; done)"
+    ]
+  }
+}
