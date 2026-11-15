@@ -56,8 +56,8 @@ do
         echo
 done
 
-echo "========== alc fib.al -o fib_al =========="
-time alc fib.al -o fib_al
+echo "========== alum build fib.al -o fib_al =========="
+time alum build fib.al -o fib_al
 echo 
 echo "==========  g++ fib.cpp -o fib_cpp -O3 -fconstexpr-ops-limit=331999999  =========="
 time  g++ fib.cpp -o fib_cpp -O3 -fconstexpr-ops-limit=331999999 
@@ -107,7 +107,7 @@ fun main(): int {
     return 0
 }
 
-========== alc fib.al -o fib_al ==========
+========== alum build fib.al -o fib_al ==========
 
 real    0m0.011s
 user    0m0.005s
@@ -174,7 +174,7 @@ fun main(): int {
 ```
 然后编译：
 ```bash
-$ alc --cte-lib ./libcte.so main.al
+$ alum build --cte-lib ./libcte.so main.al
 ```
 即可在编译时完成计算，并在运行时输出结果，但由于编译器无法检查外部函数时候真的无副作用，所以你会得到以下警告：
 ```text

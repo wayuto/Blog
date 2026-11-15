@@ -4,6 +4,7 @@ date: 2026-02-28 19:49:16
 tags: Alum
 ---
 
+## 序言
 作为一个`Toy Language`，`Alum`的生态极为弱小，这限制了我们编写一些比较复杂的程序，我们可以通过`FFI`(Foreign Function Interface，即：外部函数接口)用其他语言为`Alum`编写拓展，这里最推荐的是`C语言`，因为`Alum`的数据在内存布局上与`C语言`几乎一致，不需要转换的开销。可以通过`fun(extern)`直接引入外部函数。  
 
 ## `extern`关键字
@@ -33,9 +34,9 @@ license = ""
 language = "mixed"
 
 [build]
-linker = "alc"
+linker = "alum"
 cc = "cc"
-alc = "alc"
+compiler = "alum"
 cflags = "-Wall -O2 -nostdlib"
 includes = ["./include"]
 ```

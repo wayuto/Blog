@@ -6,6 +6,7 @@ tags: Alum
 
 > 阅读本系列文章前，建议先学习`C语言`基础，或从网上查阅相关资料
 
+## 序言
 `Alum`语言是一门静态类型，语法接近`C`与`Rust`，运行在x86_64 Linux平台的语言，对`C语言`有良好的兼容性，性能接近C(Benchmark: fib(30)), 由[笔者](/about)使用`Rust`独立开发。
 
 ## Hello world
@@ -18,9 +19,9 @@ fun main(): int { // Alum语言的函数入口，与大多数语言一致
     return 0 // 返回程序退出状态码
 }
 ```
-将其保存为.al文件，并用alc编译运行，即可得到输出
+将其保存为.al文件，并用alum编译运行，即可得到输出
 ```bash
-$ alc hello.al
+$ alum build hello.al
 $ ./hello
 ```
 程序输出结果为：

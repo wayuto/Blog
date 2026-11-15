@@ -28,12 +28,12 @@ $ rustup default stable
 ```bash
 $ git clone https://github.com/wayuto/Alum.git --depth 1 ~/Alum
 ```
-克隆完毕后，进入目录内运行安装脚本，这会安装`alc`编译器，`alum-lsp`，`almk`构建工具，`Alum`的标准库，以及`VSCode`的拓展：
+克隆完毕后，进入目录内运行安装脚本，这会安装`alum`编译器，`alum-lsp`，`almk`构建工具，`Alum`的标准库，以及`VSCode`的拓展：
 ```bash
 $ cd ~/Alum
 $ sh ./install.sh
 ```
-然后，重新启动Shell, 就能使用`alc`, `almk`等程序了
+然后，重新启动Shell, 就能使用`alum`, `almk`等程序了
 
 ## 注意事项
-`Alum`使用`lld`作为`链接器`，为了使`alc`正常工作，请先安装`lld`:
+`Alum`使用`lld`作为`链接器`，为了使`alum`正常工作，请先安装`lld`:
